@@ -5,6 +5,7 @@ import "github.com/go-chi/chi/v5"
 import "github.com/go-chi/chi/v5/middleware"
 import "time"
 import "log"
+import "github.com/mjsandagi/go-ecommerce/internal/products"
 
 
 func (app *application) mount() http.Handler {
@@ -24,24 +25,26 @@ func (app *application) mount() http.Handler {
 		w.Write([]byte("all good"))
 	})
 
+	productHandler := products.NewHandler(nil)
+	r.Get("/products", productHandler.ListProducts)
+
 	return r
 }
 
-
-func (app *application) run(h http.Handler) error(){
+func (app *application) run(h http.Handler) error {
 	srv := &http.Server{
-		Addr: app.com.address,
-		Handler: h,
+		Addr:         app.config.address,
+		Handler:      h,
 		WriteTimeout: time.Second * 30,
-		ReadTimeout: time.Second * 30,
-		IdleTimeout: time.Minute,
+		ReadTimeout:  time.Second * 30,
+		IdleTimeout:  time.Minute,
 	}
 	log.Printf("Listening to requests at %s", app.config.address)
 
 	return srv.ListenAndServe()
 
 }
- 
+
 type application struct {
 	config config
 }
