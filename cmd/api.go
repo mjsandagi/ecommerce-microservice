@@ -7,7 +7,6 @@ import "time"
 import "log"
 import "github.com/mjsandagi/go-ecommerce/internal/products"
 
-
 func (app *application) mount() http.Handler {
 	r := chi.NewRouter()
 	// A good base middleware stack
