@@ -66,4 +66,4 @@ Visit `http://localhost:8080/products` to see the JSON response.
 
 -   `cmd/`: Entry points for the application.
 -   `internal/`: Private application code (Handlers, Services).
--   `k8s/`: Infrastructure as Code (IaC) manifests.
+-   `kubernetes/`: Infrastructure as Code (IaC) manifests.
