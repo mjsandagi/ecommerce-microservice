@@ -1,6 +1,6 @@
 # Go eCommerce Microservice
 
-A lightweight, production-ready REST API built with **Go (Golang)**, containerised with **Docker (Multi-stage)**, and orchestrated via **Kubernetes**.
+A lightweight, production-ready REST API built with **Go**, containerised with **Docker (Multi-stage)**, and orchestrated via **Kubernetes**.
 
 This project demonstrates the transition from traditional heavy runtime environments (like Python/Java) to efficient, statically linked infrastructure suitable for high-performance platform engineering.
 
