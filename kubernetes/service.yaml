@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: go-ecommerce-svc
+spec:
+    selector:
+        app: ecommerce
+    ports:
+        - protocol: TCP
+          port: 80 # The port the ClusterIP listens on
+          targetPort: 8080 # The port the Go app listens on
+    type: ClusterIP # Standard internal networking
