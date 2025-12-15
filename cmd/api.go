@@ -4,10 +4,11 @@ import "net/http"
 import "github.com/go-chi/chi/v5"
 import "github.com/go-chi/chi/v5/middleware"
 import "time"
-
+import "log"
 
 
 func (app *application) mount() http.Handler {
+	r := chi.NewRouter()
 	// A good base middleware stack
 	r.Use(middleware.RequestID) // Important for rate limiting
 	r.Use(middleware.RealIP)    // Also important for rate limiting, as well as analytics
@@ -35,6 +36,8 @@ func (app *application) run(h http.Handler) error(){
 		ReadTimeout: time.Second * 30,
 		IdleTimeout: time.Minute,
 	}
+	log.Printf("Listening to requests at %s", app.config.address)
+
 	return srv.ListenAndServe()
 
 }
