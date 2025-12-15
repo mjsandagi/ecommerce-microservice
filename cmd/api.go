@@ -25,6 +25,7 @@ func (app *application) mount() http.Handler {
 		w.Write([]byte("all good"))
 	})
 
+	// productService := products.NewService()
 	productHandler := products.NewHandler(nil)
 	r.Get("/products", productHandler.ListProducts)
 
