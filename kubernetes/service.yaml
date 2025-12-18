@@ -9,4 +9,7 @@ spec:
         - protocol: TCP
           port: 80 # The port the ClusterIP listens on
           targetPort: 8080 # The port the Go app listens on
-    type: ClusterIP # Standard internal networking
+    type:
+        ClusterIP # Standard internal networking: ClusterIP only allows traffic from inside the cluster.
+        # Since this is a backend microservice, we don't want the public internet hitting it directly.
+        # If we needed external access, we would use an Ingress controller or a LoadBalancer.

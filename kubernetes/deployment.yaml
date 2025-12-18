@@ -21,13 +21,13 @@ spec:
                   ports:
                       - containerPort: 8080
                   resources:
-                      requests:
+                      requests: # Requests are what the Scheduler uses to find a node. It guarantees the pod gets at least this much.
                           memory: "64Mi"
                           cpu: "250m"
-                      limits:
+                      limits: # Limits are the hard cap. If my app has a memory leak and tries to use 129Mi, the Linux kernel (OOM Killer) will kill the pod immediately.
                           memory: "128Mi"
                           cpu: "500m"
-                  livenessProbe: # Self Healing
+                  livenessProbe: # Self Healing: Kubernetes asks "are you alive?" every 10 seconds.
                       httpGet:
                           path: /
                           port: 8080
