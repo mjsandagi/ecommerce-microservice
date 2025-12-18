@@ -1,35 +1,35 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-    name: go-ecommerce-api
-    labels:
-        app: ecommerce
-spec:
-    replicas: 3 # High Availability
-    selector:
-        matchLabels:
-            app: ecommerce
-    template:
-        metadata:
-            labels:
-                app: ecommerce
-        spec:
-            containers:
-                - name: api
-                  image: go-ecommerce:latest
-                  imagePullPolicy: IfNotPresent
-                  ports:
-                      - containerPort: 8080
-                  resources:
+apiVersion: apps/v1 # Specifies the API group and version of the Kubernetes API to use for creating this object. 'apps/v1' is the stable version for Deployments.
+kind: Deployment # Defines the type of Kubernetes resource to create. A Deployment manages a set of identical Pods (replicas).
+metadata: # Contains data that helps uniquely identify the object, including a name and optional namespace.
+    name: go-ecommerce-api # The unique name of this Deployment within the namespace.
+    labels: # Key-value pairs attached to the object for organising and selecting subsets of objects.
+        app: ecommerce # A custom label indicating this Deployment belongs to the 'ecommerce' application.
+spec: # The specification of the desired behaviour of the Deployment.
+    replicas: 3 # High Availability: Specifies that 3 identical pod instances should be running at all times.
+    selector: # Defines how the Deployment finds which Pods to manage.
+        matchLabels: # The Deployment manages any Pods that have these specific labels.
+            app: ecommerce # Must match the labels defined in the pod template below.
+    template: # The blueprint used to create new Pods.
+        metadata: # Metadata for the Pods created by this Deployment.
+            labels: # Labels applied to the Pods. These must match the selector above.
+                app: ecommerce # Identifies these pods as part of the 'ecommerce' app.
+        spec: # The specification for the Pods' contents (containers, volumes, etc.).
+            containers: # A list of containers to run within the Pod.
+                - name: api # The name of the container within the Pod. Useful for logs and exec commands.
+                  image: go-ecommerce:latest # The container image to run (repository:tag).
+                  imagePullPolicy: IfNotPresent # Tells Kubelet to only pull the image if it doesn't already exist on the node.
+                  ports: # List of ports to expose from the container.
+                      - containerPort: 8080 # The port the application inside the container is listening on.
+                  resources: # Defines compute resource requirements for the container.
                       requests: # Requests are what the Scheduler uses to find a node. It guarantees the pod gets at least this much.
-                          memory: "64Mi"
-                          cpu: "250m"
+                          memory: "64Mi" # The minimum amount of RAM reserved for this container.
+                          cpu: "250m" # The minimum CPU reserved (250 millicores = 1/4 of a vCPU).
                       limits: # Limits are the hard cap. If my app has a memory leak and tries to use 129Mi, the Linux kernel (OOM Killer) will kill the pod immediately.
-                          memory: "128Mi"
-                          cpu: "500m"
-                  livenessProbe: # Self Healing: Kubernetes asks "are you alive?" every 10 seconds.
-                      httpGet:
-                          path: /
-                          port: 8080
-                      initialDelaySeconds: 5
-                      periodSeconds: 10
+                          memory: "128Mi" # The maximum RAM the container is allowed to use.
+                          cpu: "500m" # The maximum CPU the container is allowed to use (500 millicores = 1/2 of a vCPU).
+                  livenessProbe: # Self Healing: Kubernetes asks "are you alive?" every 10 seconds. It pings the container. If the container doesn't respond, K8s restarts it. It kills the failing container and launches a fresh container in the same pod.
+                      httpGet: # Specifies the probe should perform an HTTP GET request. The probe pings via HTTP over TCP, not ICMP (the Linux ping command runs over ICMP).
+                          path: / # The URL path to hit on the container.
+                          port: 8080 # The port to send the request to.
+                      initialDelaySeconds: 5 # How long to wait after the container starts before sending the first probe.
+                      periodSeconds: 10 # How often (in seconds) to perform the probe.

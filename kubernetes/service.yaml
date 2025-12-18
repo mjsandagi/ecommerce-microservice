@@ -1,15 +1,16 @@
-apiVersion: v1
-kind: Service
-metadata:
-    name: go-ecommerce-svc
-spec:
-    selector:
-        app: ecommerce
-    ports:
-        - protocol: TCP
-          port: 80 # The port the ClusterIP listens on
-          targetPort: 8080 # The port the Go app listens on
-    type:
-        ClusterIP # Standard internal networking: ClusterIP only allows traffic from inside the cluster.
-        # Since this is a backend microservice, we don't want the public internet hitting it directly.
-        # If we needed external access, we would use an Ingress controller or a LoadBalancer.
+apiVersion: v1 # Specifies the version of the Kubernetes API to use for this object. 'v1' is the core API group for Services.
+kind: Service # Defines the type of Kubernetes resource we are creating. A Service provides a stable network endpoint for a set of Pods.
+metadata: # Contains data that helps uniquely identify the object, including name, labels, and annotations.
+    name: go-ecommerce-svc # The unique name of this Service within the namespace. DNS queries within the cluster will use this name (e.g., go-ecommerce-svc.default.svc.cluster.local).
+spec: # The specification that describes the desired state and behavior of the Service.
+    selector: # Defines how the Service finds the Pods to route traffic to. It matches labels on Pods.
+        app: ecommerce # The Service will route traffic to any Pod that has the label 'app: ecommerce'.
+    ports: # An array defining the network ports the Service exposes.
+        - protocol: TCP # The network protocol used for this port (TCP, UDP, or SCTP). TCP is the default.
+          port: 80 # The port number exposed by the Service itself (the ClusterIP). Other services in the cluster will talk to this port.
+          targetPort: 8080 # The actual port on the container (Pod) where the application is listening. Traffic hitting port 80 on the Service is forwarded to port 8080 on the Pod.
+    type: ClusterIP # Specifies how the Service is exposed. 'ClusterIP' assigns an internal IP address reachable only from within the cluster.
+    # Other types include:
+    # - NodePort: Exposes the Service on each Node's IP at a static port.
+    # - LoadBalancer: Exposes the Service externally using a cloud provider's load balancer.
+    # - ExternalName: Maps the Service to the contents of the externalName field (e.g., foo.bar.example.com).
